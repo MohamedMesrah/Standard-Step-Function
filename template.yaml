@@ -1,0 +1,47 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Step-Function (Standard)
+
+  Sample SAM Template for Step-Function (Standard)
+
+Parameters:
+  LambdaFunctionName: # <-- Edit Parameter Name -->
+    Type: String
+    Default: myLambdaFunction
+  StateMachineName: # <-- Edit Parameter Name -->
+      Type: String
+      Default: myStateMachine
+
+Metadata:
+  AWS::ServerlessRepo::Application:
+    Name: step-function-standard
+    Description: Standard step function template
+    Author: Mosaad
+    SpdxLicenseId: Apache-2.0
+    LicenseUrl: LICENSE.txt
+    ReadmeUrl: README.md
+    Labels: ['Standard-Step-Function']
+    HomePageUrl: https://github.com/MohamedMesrah/Standard-Step-Function
+    SemanticVersion: 0.0.1
+    SourceCodeUrl: https://github.com/MohamedMesrah/Standard-Step-Function
+
+Resources:
+  StateMachineLogicalID: # <-- Edit State Machin Logical ID -->
+    Type: AWS::Serverless::StateMachine
+    Properties:
+      Name: !Ref StateMachineName
+      DefinitionUri: statemachine/definition.asl.json
+      DefinitionSubstitutions:
+        LambdaFunctionLogicalIDArn: !GetAtt LambdaFunctionLogicalID.Arn # <-- Edit Lambda Function Logical ID -->
+      Policies:
+        - LambdaInvokePolicy:
+            FunctionName: !Ref LambdaFunctionLogicalID # <-- Edit Lambda Function Logical ID -->
+
+  LambdaFunctionLogicalID: # <-- Edit Lambda Function Logical ID -->
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Ref LambdaFunctionName
+      CodeUri: functions/sayHello/
+      Handler: app.lambdaHandler
+      Runtime: nodejs12.x

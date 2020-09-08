@@ -1,0 +1,21 @@
+{
+    "Comment": "<-- Edit State Machine Comment -->",
+    "StartAt": "Say Hello",
+    "States": {
+        "Say Hello": {
+            "Type": "Task",
+            "Resource": "${LambdaFunctionLogicalIDArn}",
+            "Retry": [
+                {
+                    "ErrorEquals": [
+                        "States.TaskFailed"
+                    ],
+                    "IntervalSeconds": 5,
+                    "MaxAttempts": 5,
+                    "BackoffRate": 1.5
+                }
+            ],
+            "End": true
+        }
+    }
+}

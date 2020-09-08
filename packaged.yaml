@@ -1,0 +1,53 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'Step-Function (Standard)
+
+  Sample SAM Template for Step-Function (Standard)
+
+  '
+Parameters:
+  LambdaFunctionName:
+    Type: String
+    Default: myLambdaFunction
+  StateMachineName:
+    Type: String
+    Default: myStateMachine
+Metadata:
+  AWS::ServerlessRepo::Application:
+    Name: step-function-standard
+    Description: Standard step function template
+    Author: Mosaad
+    SpdxLicenseId: Apache-2.0
+    LicenseUrl: s3://mosaad-sar/step-function-standard/d41d8cd98f00b204e9800998ecf8427e
+    ReadmeUrl: s3://mosaad-sar/step-function-standard/6eacfab8bb9cf665d95f0dc865a8a978
+    Labels:
+    - Standard-Step-Function
+    HomePageUrl: https://github.com/MohamedMesrah/Standard-Step-Function
+    SemanticVersion: 0.0.1
+    SourceCodeUrl: https://github.com/MohamedMesrah/Standard-Step-Function
+Resources:
+  StateMachineLogicalID:
+    Type: AWS::Serverless::StateMachine
+    Properties:
+      Name:
+        Ref: StateMachineName
+      DefinitionUri:
+        Bucket: mosaad-sar
+        Key: step-function-standard/1736082ffd41626384d56db0434d5460
+      DefinitionSubstitutions:
+        LambdaFunctionLogicalIDArn:
+          Fn::GetAtt:
+          - LambdaFunctionLogicalID
+          - Arn
+      Policies:
+      - LambdaInvokePolicy:
+          FunctionName:
+            Ref: LambdaFunctionLogicalID
+  LambdaFunctionLogicalID:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName:
+        Ref: LambdaFunctionName
+      CodeUri: s3://mosaad-sar/step-function-standard/3f0a657bf9e0323f4045b1a218633a11
+      Handler: app.lambdaHandler
+      Runtime: nodejs12.x
